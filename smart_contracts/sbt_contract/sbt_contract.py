@@ -1,6 +1,8 @@
 from algopy import ARC4Contract, arc4, itxn, Txn, Global, AssetConfigTxn
 
-ZERO_ADDRESS = arc4.Address("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ")
+ZERO_ADDRESS = arc4.Address(
+    "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ")
+
 
 class SoulboundNFTContract(ARC4Contract):
     """
@@ -16,7 +18,7 @@ class SoulboundNFTContract(ARC4Contract):
         asset_name = name
         unit_name = "SBT"
         url = arc4.String(f"ipfs://your-ipfs-cid-or-metadata-link")
-        
+
         # Create the ASA
         itxn.AssetConfig(
             total=1,
