@@ -21,3 +21,9 @@ class ReputationContract(ARC4Contract):
     def get_score(self, address: abi.Address) -> abi.Uint64:
         return self.app.state.get(address, abi.Uint64(0))
 
+    @arc4.abimethod
+    def set_score(self, address: abi.Address, score: abi.Uint64) -> abi.String:
+        assert self.sender == self.creator, "Only creator can set scores"
+        self.app.state.set(address, score)
+        return "Score updated"
+
