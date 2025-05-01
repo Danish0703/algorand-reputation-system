@@ -17,3 +17,7 @@ class ReputationContract(ARC4Contract):
         self.soulbound_nft_id.set(nft_id)
         return "Reputation contract initialized"
 
+    @arc4.abimethod
+    def get_score(self, address: abi.Address) -> abi.Uint64:
+        return self.app.state.get(address, abi.Uint64(0))
+
