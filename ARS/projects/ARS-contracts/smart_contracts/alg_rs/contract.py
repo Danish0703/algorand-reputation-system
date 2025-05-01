@@ -34,3 +34,19 @@ class ReputationContract(ARC4Contract):
         holding = AssetHolding.balance(address, nft_id)
         return holding.value > 0
 
+    @arc4.abimethod
+    def mint_nft(self) -> abi.String:
+        user = self.sender
+        score = self.app.state.get(user, abi.Uint64(0))
+        threshold = self.reputation_threshold.get()
+
+        assert score >= threshold, "Insufficient reputation to mint NFT"
+
+        nft_id = self.soulbound_nft_id.get()
+        itxn.asset_transfer(
+            xfer_asset=nft_id,
+            asset_receiver=user,
+            asset_amount=1
+        ).submit()
+
+        return "Soulbound NFT minted"
