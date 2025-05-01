@@ -1,44 +1,11 @@
-import logging
+# smart_contracts/alg_rs/deploy_config.py
 
-import algokit_utils
+from algokit_utils.config import DeploymentConfig
 
-logger = logging.getLogger(__name__)
+class DeployConfig(DeploymentConfig):
+    def get_deployment_name(self):
+        return "reputation-contract"
 
-
-# define deployment behaviour based on supplied app spec
-def deploy() -> None:
-    from smart_contracts.artifacts.alg_rs.alg_rs_client import (
-        HelloArgs,
-        AlgRsFactory,
-    )
-
-    algorand = algokit_utils.AlgorandClient.from_environment()
-    deployer_ = algorand.account.from_environment("DEPLOYER")
-
-    factory = algorand.client.get_typed_app_factory(
-        AlgRsFactory, default_sender=deployer_.address
-    )
-
-    app_client, result = factory.deploy(
-        on_update=algokit_utils.OnUpdate.AppendApp,
-        on_schema_break=algokit_utils.OnSchemaBreak.AppendApp,
-    )
-
-    if result.operation_performed in [
-        algokit_utils.OperationPerformed.Create,
-        algokit_utils.OperationPerformed.Replace,
-    ]:
-        algorand.send.payment(
-            algokit_utils.PaymentParams(
-                amount=algokit_utils.AlgoAmount(algo=1),
-                sender=deployer_.address,
-                receiver=app_client.app_address,
-            )
-        )
-
-    name = "world"
-    response = app_client.send.hello(args=HelloArgs(name=name))
-    logger.info(
-        f"Called hello on {app_client.app_name} ({app_client.app_id}) "
-        f"with name={name}, received: {response.abi_return}"
-    )
+    def get_app_spec(self):
+        from .contract import ReputationContract
+        return ReputationContract().app_spec()
