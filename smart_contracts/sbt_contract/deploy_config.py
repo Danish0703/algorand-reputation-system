@@ -1,44 +1,37 @@
-import logging
-
-import algokit_utils
-
-logger = logging.getLogger(__name__)
+from sbt_contract import SoulboundNFTContract
 
 
-# define deployment behaviour based on supplied app spec
-def deploy() -> None:
-    from smart_contracts.artifacts.sbt_contract.sbt_contract_client import (
-        HelloArgs,
-        SbtContractFactory,
+def get_deploy_config():
+    return dict(
+        app_name="SoulboundNFTApp",
+        approval_program=SoulboundNFTContract.approval_program(),
+        clear_program=SoulboundNFTContract.clear_program(),
+        global_schema=dict(
+            num_uints=0,
+            num_byte_slices=0,
+        ),
+        local_schema=dict(
+            num_uints=0,
+            num_byte_slices=0,
+        ),
+        extra_pages=1,  # In case the contract size needs extra space
+        app_args=[],
     )
 
-    algorand = algokit_utils.AlgorandClient.from_environment()
-    deployer_ = algorand.account.from_environment("DEPLOYER")
 
-    factory = algorand.client.get_typed_app_factory(
-        SbtContractFactory, default_sender=deployer_.address
-    )
-
-    app_client, result = factory.deploy(
-        on_update=algokit_utils.OnUpdate.AppendApp,
-        on_schema_break=algokit_utils.OnSchemaBreak.AppendApp,
-    )
-
-    if result.operation_performed in [
-        algokit_utils.OperationPerformed.Create,
-        algokit_utils.OperationPerformed.Replace,
-    ]:
-        algorand.send.payment(
-            algokit_utils.PaymentParams(
-                amount=algokit_utils.AlgoAmount(algo=1),
-                sender=deployer_.address,
-                receiver=app_client.app_address,
-            )
-        )
-
-    name = "world"
-    response = app_client.send.hello(args=HelloArgs(name=name))
-    logger.info(
-        f"Called hello on {app_client.app_name} ({app_client.app_id}) "
-        f"with name={name}, received: {response.abi_return}"
+def get_deploy_config():
+    return dict(
+        app_name="SoulboundNFTApp",
+        approval_program=SoulboundNFTContract.approval_program(),
+        clear_program=SoulboundNFTContract.clear_program(),
+        global_schema=dict(
+            num_uints=0,
+            num_byte_slices=0,
+        ),
+        local_schema=dict(
+            num_uints=0,
+            num_byte_slices=0,
+        ),
+        extra_pages=1,  # In case the contract size needs extra space
+        app_args=[],
     )
