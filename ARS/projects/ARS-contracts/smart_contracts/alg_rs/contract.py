@@ -67,5 +67,12 @@ class ReputationContract(ARC4Contract):
         ).submit()
 
         return "NFT revoked"
+    
+    @arc4.abimethod
+    def is_reputable(self, address: abi.Address) -> abi.Bool:
+        score = self.app.state.get(address, abi.Uint64(0))
+        threshold = self.reputation_threshold.get()
+        return score >= threshold
+
 
 
