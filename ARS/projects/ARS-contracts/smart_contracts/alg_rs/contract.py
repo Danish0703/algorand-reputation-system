@@ -51,6 +51,21 @@ class ReputationContract(ARC4Contract):
 
         return "Soulbound NFT minted"
     
-    threshold = self.reputation_threshold.get()
+        threshold = self.reputation_threshold.get()
+
+    @arc4.abimethod
+    def revoke_nft(self, target: abi.Address) -> abi.String:
+        assert self.sender == self.creator, "Only creator can revoke NFTs"
+
+        nft_id = self.soulbound_nft_id.get()
+        itxn.asset_transfer(
+            xfer_asset=nft_id,
+            asset_receiver=self.creator,
+            asset_sender=target,
+            asset_amount=1,
+            asset_close_to=self.creator
+        ).submit()
+
+        return "NFT revoked"
 
 
