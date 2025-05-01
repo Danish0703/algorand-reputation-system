@@ -1,0 +1,14 @@
+name: Pull Request validation
+
+on: [pull_request]
+
+
+jobs:
+  ARS-contracts-ci:
+    name: Run ARS-contracts validation
+    uses: ./.github/workflows/ARS-contracts-ci.yaml
+
+  ARS-frontend-ci:
+    name: Run ARS-frontend validation
+    uses: ./.github/workflows/ARS-frontend-ci.yaml
+

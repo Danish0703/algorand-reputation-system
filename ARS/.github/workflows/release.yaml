@@ -1,0 +1,38 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'docs/**'
+      - '**.md'
+      - '.vscode/**'
+      - '.idea/**'
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  ARS-contracts-validate:
+    name: Run ARS-contracts release
+    secrets: inherit
+    uses: ./.github/workflows/ARS-contracts-ci.yaml
+
+  ARS-contracts-release:
+    name: Run ARS-contracts release
+    secrets: inherit
+    uses: ./.github/workflows/ARS-contracts-cd.yaml
+    needs: ARS-contracts-validate
+
+  ARS-frontend-validate:
+    name: Run ARS-frontend release
+    secrets: inherit
+    uses: ./.github/workflows/ARS-frontend-ci.yaml
+
+  ARS-frontend-release:
+    name: Run ARS-frontend release
+    secrets: inherit
+    uses: ./.github/workflows/ARS-frontend-cd.yaml
+    needs: ARS-frontend-validate
