@@ -30,5 +30,7 @@ class ReputationContract(ARC4Contract):
     @arc4.abimethod
     def has_nft(self, address: abi.Address) -> abi.Bool:
         # Check asset balance inner logic here
-        return True  # Placeholder
+        nft_id = self.soulbound_nft_id.get()
+        holding = AssetHolding.balance(address, nft_id)
+        return holding.value > 0
 
