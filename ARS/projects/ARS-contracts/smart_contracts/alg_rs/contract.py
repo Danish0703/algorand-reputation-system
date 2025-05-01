@@ -11,10 +11,14 @@ class ReputationContract(ARC4Contract):
     def __init__(self):
         self.reputation_scores = GlobalStateValue 
         self.soulbound_nft_id = GlobalStateValue 
+        self.reputation_threshold = GlobalStateValue()
+
 
     @arc4.abimethod
     def bootstrap(self, nft_id: abi.Uint64) -> abi.String:
         self.soulbound_nft_id.set(nft_id)
+        self.reputation_threshold.set(threshold)
+
         return "Reputation contract initialized"
 
     @arc4.abimethod
