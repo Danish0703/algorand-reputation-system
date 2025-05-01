@@ -1,5 +1,17 @@
 # ARS-contracts
 
+## 🔐 ABI Methods
+
+- `bootstrap(nft_id, threshold)`
+- `set_score(address, score)`
+- `get_score(address)`
+- `is_reputable(address)`
+- `has_nft(address)`
+- `mint_nft()`
+- `revoke_nft(address)`
+- `update_threshold(new_threshold)`
+
+
 This project has been generated using AlgoKit. See below for default getting started instructions.
 
 # Setup
