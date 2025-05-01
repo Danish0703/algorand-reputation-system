@@ -27,3 +27,8 @@ class ReputationContract(ARC4Contract):
         self.app.state.set(address, score)
         return "Score updated"
 
+    @arc4.abimethod
+    def has_nft(self, address: abi.Address) -> abi.Bool:
+        # Check asset balance inner logic here
+        return True  # Placeholder
+
