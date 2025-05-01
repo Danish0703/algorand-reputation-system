@@ -1,3 +1,3 @@
-class ReputationContract(ARC4Contract):
-    def __init__(self):
-        pass
+from .contract import ReputationContract
+
+__all__ = ["ReputationContract"]
