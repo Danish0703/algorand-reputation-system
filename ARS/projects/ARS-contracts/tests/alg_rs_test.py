@@ -16,3 +16,6 @@ def setup_contract():
 def test_reputation_flow(setup_contract):
     contract, client, creator, app_id = setup_contract
 
+    # Step 1: Bootstrap with dummy NFT ID and threshold
+    contract.bootstrap(123456, 80).send(client, creator)
+
