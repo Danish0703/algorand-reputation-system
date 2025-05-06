@@ -1,39 +1,36 @@
 # smart_contracts/alg_rs/contract.py
 
-from algopy import ARC4Contract, abi, GlobalStateValue, itxn, gtxn
+from algopy import ARC4Contract, abi, GlobalStateValue, itxn, AssetHolding
 from algopy.arc4 import arc4
 
 class ReputationContract(ARC4Contract):
-    # Global states
-    reputation_scores: GlobalStateValue[abi.Uint64]
-    soulbound_nft_id: GlobalStateValue[abi.Uint64] 
+    soulbound_nft_id: GlobalStateValue[abi.Uint64]
+    reputation_threshold: GlobalStateValue[abi.Uint64]
+    reputation_scores: GlobalStateValue[abi.Address, abi.Uint64]
 
     def __init__(self):
-        self.reputation_scores = GlobalStateValue 
-        self.soulbound_nft_id = GlobalStateValue 
+        self.soulbound_nft_id = GlobalStateValue()
         self.reputation_threshold = GlobalStateValue()
-
+        self.reputation_scores = GlobalStateValue()
 
     @arc4.abimethod
-    def bootstrap(self, nft_id: abi.Uint64) -> abi.String:
+    def bootstrap(self, nft_id: abi.Uint64, threshold: abi.Uint64) -> abi.String:
         self.soulbound_nft_id.set(nft_id)
         self.reputation_threshold.set(threshold)
-
         return "Reputation contract initialized"
 
     @arc4.abimethod
     def get_score(self, address: abi.Address) -> abi.Uint64:
-        return self.app.state.get(address, abi.Uint64(0))
+        return self.reputation_scores[address].get()
 
     @arc4.abimethod
     def set_score(self, address: abi.Address, score: abi.Uint64) -> abi.String:
         assert self.sender == self.creator, "Only creator can set scores"
-        self.app.state.set(address, score)
+        self.reputation_scores[address].set(score)
         return "Score updated"
 
     @arc4.abimethod
     def has_nft(self, address: abi.Address) -> abi.Bool:
-        # Check asset balance inner logic here
         nft_id = self.soulbound_nft_id.get()
         holding = AssetHolding.balance(address, nft_id)
         return holding.value > 0
@@ -41,7 +38,7 @@ class ReputationContract(ARC4Contract):
     @arc4.abimethod
     def mint_nft(self) -> abi.String:
         user = self.sender
-        score = self.app.state.get(user, abi.Uint64(0))
+        score = self.reputation_scores[user].get()
         threshold = self.reputation_threshold.get()
 
         assert score >= threshold, "Insufficient reputation to mint NFT"
@@ -54,8 +51,6 @@ class ReputationContract(ARC4Contract):
         ).submit()
 
         return "Soulbound NFT minted"
-    
-        threshold = self.reputation_threshold.get()
 
     @arc4.abimethod
     def revoke_nft(self, target: abi.Address) -> abi.String:
@@ -71,10 +66,9 @@ class ReputationContract(ARC4Contract):
         ).submit()
 
         return "NFT revoked"
-        
+
     @arc4.abimethod
     def is_reputable(self, address: abi.Address) -> abi.Bool:
-        score = self.app.state.get(address, abi.Uint64(0))
+        score = self.reputation_scores[address].get()
         threshold = self.reputation_threshold.get()
         return score >= threshold
-   
