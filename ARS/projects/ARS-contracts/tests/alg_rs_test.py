@@ -19,3 +19,6 @@ def test_reputation_flow(setup_contract):
     # Step 1: Bootstrap with dummy NFT ID and threshold
     contract.bootstrap(123456, 80).send(client, creator)
 
+    # Step 2: Set score for a user
+    user_address = creator.address  # Use same account for test
+    contract.set_score(user_address, 90).send(client, creator)
