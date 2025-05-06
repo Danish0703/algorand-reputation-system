@@ -13,3 +13,6 @@ def setup_contract():
     app_id = deploy_contract(contract, client, creator)
     return contract, client, creator, app_id
 
+def test_reputation_flow(setup_contract):
+    contract, client, creator, app_id = setup_contract
+
