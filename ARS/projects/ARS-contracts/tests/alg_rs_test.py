@@ -29,3 +29,7 @@ def test_reputation_flow(setup_contract):
 
     # Step 4: Mint NFT
     contract.mint_nft().send(client, creator)
+
+    # Step 5: Check NFT balance (has_nft should be True)
+    has_nft = contract.has_nft(user_address).call(client)
+    assert has_nft.return_value == True
