@@ -22,3 +22,7 @@ def test_reputation_flow(setup_contract):
     # Step 2: Set score for a user
     user_address = creator.address  # Use same account for test
     contract.set_score(user_address, 90).send(client, creator)
+
+    # Step 3: Confirm is_reputable returns true
+    result = contract.is_reputable(user_address).call(client)
+    assert result.return_value == True
