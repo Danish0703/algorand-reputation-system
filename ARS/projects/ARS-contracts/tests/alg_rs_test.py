@@ -26,3 +26,6 @@ def test_reputation_flow(setup_contract):
     # Step 3: Confirm is_reputable returns true
     result = contract.is_reputable(user_address).call(client)
     assert result.return_value == True
+
+    # Step 4: Mint NFT
+    contract.mint_nft().send(client, creator)
