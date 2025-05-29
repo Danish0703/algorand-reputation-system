@@ -1,24 +1,22 @@
-import { useWallet } from '@txnlab/use-wallet-react'
-import { useMemo } from 'react'
-import { ellipseAddress } from '../utils/ellipseAddress'
-import { getAlgodConfigFromViteEnvironment } from '../utils/network/getAlgoClientConfigs'
+// src/components/Account.tsx (New File)
+import React from 'react';
 
-const Account = () => {
-  const { activeAddress } = useWallet()
-  const algoConfig = getAlgodConfigFromViteEnvironment()
-
-  const networkName = useMemo(() => {
-    return algoConfig.network === '' ? 'localnet' : algoConfig.network.toLocaleLowerCase()
-  }, [algoConfig.network])
-
-  return (
-    <div>
-      <a className="text-xl" target="_blank" href={`https://lora.algokit.io/${networkName}/account/${activeAddress}/`}>
-        Address: {ellipseAddress(activeAddress)}
-      </a>
-      <div className="text-xl">Network: {networkName}</div>
-    </div>
-  )
+interface AccountProps {
+  address: string | null;
 }
 
-export default Account
+const Account: React.FC<AccountProps> = ({ address }) => {
+  if (!address) {
+    return <p>No account connected.</p>;
+  }
+
+  return (
+    <div className="account-info">
+      <h3>Your Account</h3>
+      <p>Address: {address}</p>
+      {/* You might fetch and display balance here */}
+    </div>
+  );
+};
+
+export default Account;
