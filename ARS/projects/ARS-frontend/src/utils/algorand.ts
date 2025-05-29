@@ -25,3 +25,37 @@ export const connectToPera = async (): Promise<string[]> => {
 export const disconnectFromPera = async (): Promise<void> => {
   await peraWallet.disconnect();
 };
+
+// --- Smart Contract Interaction (Using algosdk directly or generated client) ---
+export const callAppMethod = async (
+  method: string,
+  args: any[],
+  senderAddress: string
+) => {
+  try {
+    const suggestedParams = await algodClient.getTransactionParams().do();
+    const appArgs = args.map((arg) => algosdk.encodeUint64(arg)); // Example for uint64 args
+
+    const txn = algosdk.makeApplicationNoOpTxn(
+      senderAddress,
+      suggestedParams,
+      REPUTATION_APP_ID,
+      new Uint8Array(Buffer.from(method)), // Method name as argument
+      appArgs
+    );
+
+    const txns = [txn];
+    const signedTxns = await peraWallet.signTransaction([
+      {
+        txn: txn.toByte(),
+        signers: [senderAddress],
+      },
+    ]);
+
+    const txId = await algodClient.sendRawTransaction(signedTxns.map(t => t.blob)).do();
+    return txId;
+  } catch (error) {
+    console.error(`Error calling ${method}:`, error);
+    throw error;
+  }
+};
