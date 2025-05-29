@@ -1,6 +1,6 @@
 // src/components/ConnectWallet.tsx
 import React from 'react';
-import { connectToPera } from '../utils/algorand'; // Import connectToPera
+import { connectToPera, disconnectFromPera } from '../utils/algorand'; // Import disconnectFromPera
 
 interface ConnectWalletProps {
   onConnect: (accounts: string[]) => void;
@@ -19,14 +19,21 @@ const ConnectWallet: React.FC<ConnectWalletProps> = ({ onConnect, onDisconnect, 
     }
   };
 
-  // ... (handleDisconnect will be added later)
+  const handleDisconnect = async () => {
+    try {
+      await disconnectFromPera();
+      onDisconnect();
+    } catch (error) {
+      console.error("Failed to disconnect wallet:", error);
+    }
+  };
 
   return (
     <div className="connect-wallet-container">
       {connectedAccount ? (
         <div>
           <p>Connected: {connectedAccount}</p>
-          <button className="button disconnect-button">Disconnect Wallet</button>
+          <button onClick={handleDisconnect} className="button disconnect-button">Disconnect Wallet</button>
         </div>
       ) : (
         <button onClick={handleConnect} className="button connect-button">Connect Pera Wallet</button>
