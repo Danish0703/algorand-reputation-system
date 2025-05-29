@@ -1,13 +1,12 @@
 // src/utils/algorand.ts
-// (Already created in commit 8, just a placeholder to mark its significance)
 import algosdk from "algosdk";
 import { PeraWalletConnect } from "@perawallet/connect";
 
-const ALGOD_SERVER = "http://localhost:4001";
-const ALGOD_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-const ALGOD_PORT = "";
+const ALGOD_SERVER = "http://localhost:4001"; // Or Algorand node URL
+const ALGOD_TOKEN = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"; // Or your Algorand node token
+const ALGOD_PORT = ""; // Leave empty for default or specify
 
-const algodClient = new algosdk.Algodv2(ALGOD_TOKEN, ALGOD_SERVER, ALGOD_PORT);
+const algodClient = new algosdk.Algodv2(ALGOD_TOKEN, ALGOD_SERVER, ALGOD_PORT); // This line is the focus
 const peraWallet = new PeraWalletConnect();
 
 export const REPUTATION_APP_ID = 123; // TODO: Replace with your deployed contract's app ID
