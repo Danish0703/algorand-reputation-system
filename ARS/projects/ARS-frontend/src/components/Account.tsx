@@ -1,4 +1,4 @@
-// src/components/Account.tsx (New File)
+// src/components/Account.tsx
 import React from 'react';
 
 interface AccountProps {
@@ -13,7 +13,7 @@ const Account: React.FC<AccountProps> = ({ address }) => {
   return (
     <div className="account-info">
       <h3>Your Account</h3>
-      <p>Address: {address}</p>
+      <p>Address: {address.substring(0, 12)}...{address.slice(-8)}</p>
       {/* You might fetch and display balance here */}
     </div>
   );
