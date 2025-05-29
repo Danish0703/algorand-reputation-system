@@ -59,3 +59,19 @@ export const callAppMethod = async (
     throw error;
   }
 };
+
+export const getGlobalStateValue = async (key: string): Promise<any> => {
+  const appInfo = await algodClient.getApplicationByID(REPUTATION_APP_ID).do();
+  const globalState = appInfo.params["global-state"];
+  const encodedKey = Buffer.from(key).toString('base64');
+  const stateEntry = globalState.find((entry: any) => entry.key === encodedKey);
+
+  if (stateEntry) {
+    if (stateEntry.value.type === 1) { // Uint
+      return stateEntry.value.uint;
+    } else { // Bytes
+      return Buffer.from(stateEntry.value.bytes, 'base64').toString();
+    }
+  }
+  return null;
+};
