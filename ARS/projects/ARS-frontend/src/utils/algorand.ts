@@ -9,6 +9,7 @@ const ALGOD_PORT = ""; // Leave empty for default or specify
 const algodClient = new algosdk.Algodv2(ALGOD_TOKEN, ALGOD_SERVER, ALGOD_PORT); // This line is the focus
 const peraWallet = new PeraWalletConnect();
 
+//Define REPUTATION_APP_ID constant
 export const REPUTATION_APP_ID = 123; // TODO: Replace with your deployed contract's app ID
 
 export const getAccountAddress = async (): Promise<string | null> => {
