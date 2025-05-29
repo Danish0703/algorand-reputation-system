@@ -1,6 +1,6 @@
 // src/components/ConnectWallet.tsx
 import React from 'react';
-import { connectToPera, disconnectFromPera } from '../utils/algorand'; // Import disconnectFromPera
+import { connectToPera, disconnectFromPera } from '../utils/algorand';
 
 interface ConnectWalletProps {
   onConnect: (accounts: string[]) => void;
@@ -32,7 +32,7 @@ const ConnectWallet: React.FC<ConnectWalletProps> = ({ onConnect, onDisconnect, 
     <div className="connect-wallet-container">
       {connectedAccount ? (
         <div>
-          <p>Connected: {connectedAccount}</p>
+          <p>Connected: {connectedAccount.substring(0, 8)}...{connectedAccount.slice(-4)}</p>
           <button onClick={handleDisconnect} className="button disconnect-button">Disconnect Wallet</button>
         </div>
       ) : (
