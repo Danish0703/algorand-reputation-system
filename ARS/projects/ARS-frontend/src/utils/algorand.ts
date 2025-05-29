@@ -14,7 +14,7 @@ export const REPUTATION_APP_ID = 123; // TODO: Replace with your deployed contra
 export const getAccountAddress = async (): Promise<string | null> => {
   const accounts = await peraWallet.getConnectedAccounts();
   return accounts.length > 0 ? accounts[0] : null;
-};
+};//Implemented getAccountAddress utility
 
 export const connectToPera = async (): Promise<string[]> => {
   const accounts = await peraWallet.connect();
