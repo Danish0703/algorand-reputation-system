@@ -54,6 +54,70 @@ const AppCalls: React.FC<AppCallsProps> = ({ connectedAccount, isCreator, creato
     // Re-fetch when connectedAccount changes
   }, [connectedAccount]);
 
+    // --- Action Handlers ---
+
+  const handleBootstrapApp = async () => {
+    if (!connectedAccount || !isCreator) {
+      setStatusMessage("Only the contract creator can bootstrap the application.");
+      return;
+    }
+    setStatusMessage("Bootstrapping application...");
+    try {
+      const txResponse = await callAppMethod("bootstrap", [], connectedAccount);
+      setStatusMessage(`Application bootstrapped! Transaction ID: ${txResponse.txId}`);
+      // You might want to refresh global state here or indicate success
+    } catch (error) {
+      console.error("Error bootstrapping app:", error);
+      setStatusMessage(`Error bootstrapping app: ${(error as Error).message}`);
+    }
+  };
+
+  const handleSetReputationScore = async () => {
+    if (!connectedAccount || !isCreator) {
+      setStatusMessage("Only the contract creator can set reputation scores.");
+      return;
+    }
+    if (!targetAddress || scoreValue === null) {
+      setStatusMessage("Please enter a target address and a score value.");
+      return;
+    }
+    setStatusMessage(`Setting reputation score for ${targetAddress} to ${scoreValue}...`);
+    try {
+      const txResponse = await callAppMethod("set_reputation_score", [targetAddress, scoreValue], connectedAccount);
+      setStatusMessage(`Score set! Transaction ID: ${txResponse.txId}`);
+      // If setting for current user, refresh their score
+      if (targetAddress === connectedAccount) {
+        setReputationScore(scoreValue);
+      }
+    } catch (error) {
+      console.error("Error setting reputation score:", error);
+      setStatusMessage(`Error setting score: ${(error as Error).message}`);
+    }
+  };
+
+  const handleIssueNft = async () => {
+    if (!connectedAccount || !isCreator) {
+      setStatusMessage("Only the contract creator can issue NFTs.");
+      return;
+    }
+    if (!targetAddress) {
+      setStatusMessage("Please enter target address to issue NFT to.");
+      return;
+    }
+    setStatusMessage("Issuing NFT...");
+    try {
+      const txResponse = await callAppMethod("issue_nft", [targetAddress], connectedAccount);
+      setStatusMessage(`NFT issued! Transaction ID: ${txResponse.txId}`);
+      // Refresh has_nft status if it was for the current user
+      if (targetAddress === connectedAccount) {
+        setHasNft(true); // Assuming success
+      }
+    } catch (error) {
+      console.error("Error issuing NFT:", error);
+      setStatusMessage(`Error issuing NFT: ${(error as Error).message}`);
+    }
+  };
+
   const handleRevokeNft = async () => {
     if (!connectedAccount || !isCreator) {
       setStatusMessage("Only the contract creator can revoke NFTs.");
