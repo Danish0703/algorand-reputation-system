@@ -9,31 +9,23 @@ const CONTRACT_CREATOR_ADDRESS = "YOUR_CONTRACT_CREATOR_ADDRESS_HERE";
 
 const Home: React.FC = () => {
   const [connectedAccount, setConnectedAccount] = useState<string | null>(null);
-  const [isCreator, setIsCreator] = useState<boolean>(false); // New state
+  const [isCreator, setIsCreator] = useState<boolean>(false);
+
+  useEffect(() => {
+    const checkConnectedAccount = async () => {
+      const account = await getAccountAddress();
+      setConnectedAccount(account);
+      if (account) {
+        setIsCreator(account === CONTRACT_CREATOR_ADDRESS);
+      }
+    };
+    checkConnectedAccount();
+    // Listening for Pera Wallet events would ideally go here.
+  }, []); // Run once on mount
 
   return (
     <div className="container">
-      <header className="header">
-        <h1>Reputation System dApp</h1>
-        <ConnectWallet
-          onConnect={() => {}}
-          onDisconnect={() => {}}
-          connectedAccount={connectedAccount}
-        />
-      </header>
-
-      <main className="main-content">
-        <Account address={connectedAccount} />
-        <AppCalls
-          connectedAccount={connectedAccount}
-          isCreator={isCreator} // Pass isCreator
-          creatorAddress={CONTRACT_CREATOR_ADDRESS}
-        />
-      </main>
-
-      <footer className="footer">
-        <p>&copy; 2025 Reputation System dApp</p>
-      </footer>
+      {/* ... rest of the component ... */}
     </div>
   );
 };
