@@ -1,76 +1,32 @@
-// src/components/Home.tsx
-import { useWallet } from '@txnlab/use-wallet-react'
-import React, { useState } from 'react'
-import ConnectWallet from './components/ConnectWallet'
-import Transact from './components/Transact'
-import AppCalls from './components/AppCalls'
+// src/Home.tsx (New File)
+import React, { useState, useEffect } from 'react'; // Will add useEffect later
+import ConnectWallet from './components/ConnectWallet';
+import Account from './components/Account';
+import AppCalls from './components/AppCalls';
+import { getAccountAddress } from './utils/algorand'; // Will add this import later
 
-interface HomeProps {}
+// Replace with the actual creator address from your smart contract deployment
+const CONTRACT_CREATOR_ADDRESS = "YOUR_CONTRACT_CREATOR_ADDRESS_HERE"; // IMPORTANT: Update this!
 
-const Home: React.FC<HomeProps> = () => {
-  const [openWalletModal, setOpenWalletModal] = useState<boolean>(false)
-  const [openDemoModal, setOpenDemoModal] = useState<boolean>(false)
-  const [appCallsDemoModal, setAppCallsDemoModal] = useState<boolean>(false)
-  const { activeAddress } = useWallet()
-
-  const toggleWalletModal = () => {
-    setOpenWalletModal(!openWalletModal)
-  }
-
-  const toggleDemoModal = () => {
-    setOpenDemoModal(!openDemoModal)
-  }
-
-  const toggleAppCallsModal = () => {
-    setAppCallsDemoModal(!appCallsDemoModal)
-  }
+const Home: React.FC = () => {
+  // States will be managed here
 
   return (
-    <div className="hero min-h-screen bg-teal-400">
-      <div className="hero-content text-center rounded-lg p-6 max-w-md bg-white mx-auto">
-        <div className="max-w-md">
-          <h1 className="text-4xl">
-            Welcome to <div className="font-bold">AlgoKit 🙂</div>
-          </h1>
-          <p className="py-6">
-            This starter has been generated using official AlgoKit React template. Refer to the resource below for next steps.
-          </p>
+    <div className="container">
+      <header className="header">
+        <h1>Reputation System dApp</h1>
+        {/* ConnectWallet will go here */}
+      </header>
 
-          <div className="grid">
-            <a
-              data-test-id="getting-started"
-              className="btn btn-primary m-2"
-              target="_blank"
-              href="https://github.com/algorandfoundation/algokit-cli"
-            >
-              Getting started
-            </a>
+      <main className="main-content">
+        {/* Account and AppCalls will go here */}
+      </main>
 
-            <div className="divider" />
-            <button data-test-id="connect-wallet" className="btn m-2" onClick={toggleWalletModal}>
-              Wallet Connection
-            </button>
-
-            {activeAddress && (
-              <button data-test-id="transactions-demo" className="btn m-2" onClick={toggleDemoModal}>
-                Transactions Demo
-              </button>
-            )}
-
-            {activeAddress && (
-              <button data-test-id="appcalls-demo" className="btn m-2" onClick={toggleAppCallsModal}>
-                Contract Interactions Demo
-              </button>
-            )}
-          </div>
-
-          <ConnectWallet openModal={openWalletModal} closeModal={toggleWalletModal} />
-          <Transact openModal={openDemoModal} setModalState={setOpenDemoModal} />
-          <AppCalls openModal={appCallsDemoModal} setModalState={setAppCallsDemoModal} />
-        </div>
-      </div>
+      <footer className="footer">
+        <p>&copy; 2025 Reputation System dApp</p>
+      </footer>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
