@@ -75,3 +75,44 @@ export const getGlobalStateValue = async (key: string): Promise<any> => {
   }
   return null;
 };
+
+export const getReputationScore = async (address: string, senderAddress: string): Promise<number | null> => {
+  try {
+    const suggestedParams = await algodClient.getTransactionParams().do();
+    const methodArgs = {
+      name: "get_score",
+      args: [algosdk.decodeAddress(address).publicKey],
+    };
+
+    const comp = algosdk.makeApplicationCallTxnFromObject({
+      from: senderAddress,
+      appIndex: REPUTATION_APP_ID,
+      onComplete: algosdk.OnApplicationComplete.NoOpOC,
+      suggestedParams: suggestedParams,
+      appArgs: [new Uint8Array(Buffer.from(methodArgs.name)), methodArgs.args[0]],
+    });
+
+    const txns = [comp];
+    const signedTxns = await peraWallet.signTransaction([
+      {
+        txn: comp.toByte(),
+        signers: [senderAddress],
+      },
+    ]);
+
+    const { txId } = await algodClient.sendRawTransaction(signedTxns.map(t => t.blob)).do();
+    const result = await algosdk.waitForConfirmation(algodClient, txId, 4);
+
+    // Parse the return value from the app call
+    const logs = result["logs"];
+    if (logs && logs.length > 0) {
+      const decodedReturn = new Uint8Array(Buffer.from(logs[logs.length - 1], 'base64'));
+      return new algosdk.ABI.Uint(64).decode(decodedReturn);
+    }
+    return null;
+
+  } catch (error) {
+    console.error("Error getting reputation score:", error);
+    throw error;
+  }
+};

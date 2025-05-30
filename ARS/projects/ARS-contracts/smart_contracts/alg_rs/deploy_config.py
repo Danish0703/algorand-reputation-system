@@ -1,7 +1,8 @@
-# smart_contracts/alg_rs/deploy_config.py
+from algokit_utils.config import DeploymentConfig
+class DeployConfig(DeploymentConfig):
+    def get_deployment_name(self):
+        return "contract.py"
 
-from algopy import ARC4Contract
-from .contract import ReputationContract
-
-def get_contract() -> ARC4Contract:
-    return ReputationContract()
+    def get_app_spec(self):
+        from .contract import ReputationContract
+        return ReputationContract().app_spec()

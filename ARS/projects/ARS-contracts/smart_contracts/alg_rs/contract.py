@@ -1,7 +1,9 @@
 # smart_contracts/alg_rs/contract.py
 
-from algopy import ARC4Contract, abi, GlobalStateValue, itxn, AssetHolding
+from algopy import ARC4Contract, abi, GlobalStateValue, itxn, gtxn
 from algopy.arc4 import arc4
+from algopy.arc4.contract import ARC4Contract
+
 
 class ReputationContract(ARC4Contract):
     soulbound_nft_id: GlobalStateValue[abi.Uint64]
