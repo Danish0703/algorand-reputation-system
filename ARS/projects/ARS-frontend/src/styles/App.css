@@ -96,3 +96,12 @@ body {
   margin-bottom: 20px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Added outer shadow for separation */
 }
+
+.action-card input[type="text"],
+.action-card input[type="number"] {
+  width: calc(100% - 20px); /* Adjusted width to fit padding better */
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
