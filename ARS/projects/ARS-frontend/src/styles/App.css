@@ -84,3 +84,7 @@ body {
   margin-top: 0;
   margin-bottom: 15px;
 }
+.contract-info p {
+  margin: 5px 0; /* Reduced margin for compact info */
+  font-size: 0.95em; /* Slightly smaller font */
+}
