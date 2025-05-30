@@ -1,6 +1,6 @@
 // src/Home.tsx
 import React, { useState, useEffect } from 'react';
-import ConnectWallet from './components/ConnectWallet';
+import ConnectWallet from './components/ConnectWallet'; // Import
 import Account from './components/Account';
 import AppCalls from './components/AppCalls';
 import { getAccountAddress } from './utils/algorand';
@@ -38,9 +38,9 @@ const Home: React.FC = () => {
     <div className="container">
       <header className="header">
         <h1>Reputation System dApp</h1>
-        <ConnectWallet
-          onConnect={handleConnect} // Pass handler
-          onDisconnect={handleDisconnect} // Pass handler
+        <ConnectWallet // Render ConnectWallet
+          onConnect={handleConnect}
+          onDisconnect={handleDisconnect}
           connectedAccount={connectedAccount}
         />
       </header>
