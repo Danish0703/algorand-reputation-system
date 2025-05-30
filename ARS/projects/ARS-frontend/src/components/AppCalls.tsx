@@ -1,5 +1,5 @@
 // src/components/AppCalls.tsx
-import React, { useState } from 'react'; // Import useState
+import React, { useState } from 'react';
 import {
   REPUTATION_APP_ID,
   getReputationScore,
@@ -14,7 +14,9 @@ interface AppCallsProps {
 }
 
 const AppCalls: React.FC<AppCallsProps> = ({ connectedAccount, isCreator, creatorAddress }) => {
-  const [reputationScore, setReputationScore] = useState<number | null>(null); // New state
+  const [reputationScore, setReputationScore] = useState<number | null>(null);
+  const [nftId, setNftId] = useState<number | null>(null); // New state
+  const [threshold, setThreshold] = useState<number | null>(null); // New state
 
   return (
     <div className="app-calls-container">
@@ -24,6 +26,8 @@ const AppCalls: React.FC<AppCallsProps> = ({ connectedAccount, isCreator, creato
           <p>Connected Account: {connectedAccount.substring(0, 8)}...</p>
           <div className="contract-info">
             <h3>Contract State</h3>
+            <p>Soulbound NFT ID: {nftId !== null ? nftId : 'N/A'}</p>
+            <p>Reputation Threshold: {threshold !== null ? threshold : 'N/A'}</p>
             <p>Your Reputation Score: {reputationScore !== null ? reputationScore : 'Loading...'}</p>
           </div>
           {/* Interaction UIs will go here */}
