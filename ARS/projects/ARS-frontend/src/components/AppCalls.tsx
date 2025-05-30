@@ -143,23 +143,80 @@ const AppCalls: React.FC<AppCallsProps> = ({ connectedAccount, isCreator, creato
 
   return (
     <div className="app-calls-container">
-      {/* ... existing UI ... */}
-      {isCreator && (
-        <div className="creator-actions">
-          {/* ... bootstrap and set score cards ... */}
-          <div className="action-card">
-            <h4>Revoke Soulbound NFT</h4>
-            <input
-              type="text"
-              placeholder="Target Address to Revoke"
-              value={targetAddress}
-              onChange={(e) => setTargetAddress(e.target.value)}
-            />
-            <button onClick={handleRevokeNft} className="button action-button">Revoke NFT</button>
-          </div>
-        </div>
+      <h2>Contract Interactions</h2>
+      {connectedAccount ? (
+        <>
+          <p>Connected Account: {connectedAccount.substring(0, 8)}...{connectedAccount.slice(-4)}</p>
+          <p>Your Reputation Score: {reputationScore !== null ? reputationScore : 'Loading...'}</p>
+          <p>Has Soulbound NFT: {hasNft ? 'Yes' : 'No'}</p>
+
+          {isCreator && (
+            <div className="creator-actions">
+              <h3>Creator Actions</h3>
+              <p>Creator Address: {creatorAddress}</p>
+
+              <div className="action-card">
+                <h4>Bootstrap Application</h4>
+                <p>Initialize the application's global state.</p>
+                <button onClick={handleBootstrapApp} className="button action-button">Bootstrap App</button>
+              </div>
+
+              <div className="action-card">
+                <h4>Set Reputation Score</h4>
+                <input
+                  type="text"
+                  placeholder="Target Address"
+                  value={targetAddress}
+                  onChange={(e) => setTargetAddress(e.target.value)}
+                />
+                <input
+                  type="number"
+                  placeholder="Score Value"
+                  value={scoreValue}
+                  onChange={(e) => setScoreValue(parseInt(e.target.value))}
+                />
+                <button onClick={handleSetReputationScore} className="button action-button">Set Score</button>
+              </div>
+
+              <div className="action-card">
+                <h4>Issue Soulbound NFT</h4>
+                <input
+                  type="text"
+                  placeholder="Target Address to Issue"
+                  value={targetAddress}
+                  onChange={(e) => setTargetAddress(e.target.value)}
+                />
+                <button onClick={handleIssueNft} className="button action-button">Issue NFT</button>
+              </div>
+
+              <div className="action-card">
+                <h4>Revoke Soulbound NFT</h4>
+                <input
+                  type="text"
+                  placeholder="Target Address to Revoke"
+                  value={targetAddress}
+                  onChange={(e) => setTargetAddress(e.target.value)}
+                />
+                <button onClick={handleRevokeNft} className="button action-button">Revoke NFT</button>
+              </div>
+            </div>
+          )}
+
+          {/* User-specific actions (e.g., opting into app, burning their own NFT, etc.) could go here */}
+          {!isCreator && (
+            <div className="user-actions">
+              <h3>User Information</h3>
+              {/* You might add actions for regular users here, e.g., viewing app state, opting into the app, etc. */}
+              <p>You are connected as a regular user.</p>
+            </div>
+          )}
+
+          {statusMessage && <p className="status-message">{statusMessage}</p>}
+
+        </>
+      ) : (
+        <p>Please connect your wallet to interact with the contract.</p>
       )}
-      {/* ... user actions and status message ... */}
     </div>
   );
 };
