@@ -60,3 +60,9 @@ body {
 .button:hover {
   background-color: #0056b3;
 }
+
+.button:disabled {
+    background-color: #cccccc; /* Greyed out for disabled */
+    cursor: not-allowed;
+    opacity: 0.8; /* Slightly transparent */
+}
