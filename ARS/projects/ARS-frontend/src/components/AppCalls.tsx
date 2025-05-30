@@ -21,6 +21,39 @@ const AppCalls: React.FC<AppCallsProps> = ({ connectedAccount, isCreator, creato
   const [targetAddress, setTargetAddress] = useState<string>(''); // For Bootstrap, Set Score, Revoke NFT
   const [scoreValue, setScoreValue] = useState<number>(0); // For setting reputation score
 
+   // --- Effects ---
+  useEffect(() => {
+    const fetchAccountData = async () => {
+      if (connectedAccount) {
+        setStatusMessage('Fetching account data...');
+        try {
+          // Fetch reputation score
+          const score = await getReputationScore(connectedAccount);
+          setReputationScore(score);
+
+          // Check for NFT presence (assuming a global state or method for this)
+          // This will depend on your contract logic. Example: checking a local state or an opt-in
+          // For simplicity, let's assume getGlobalStateValue can fetch a user's NFT status if designed this way.
+          // A more robust check might involve looking at asset holdings.
+          const nftStatus = await getGlobalStateValue(REPUTATION_APP_ID, `nft_holder_${connectedAccount}`);
+          setHasNft(nftStatus === 1); // Assuming 1 means true, 0 means false
+
+          setStatusMessage('');
+        } catch (error) {
+          console.error("Error fetching account data:", error);
+          setStatusMessage(`Error fetching data: ${(error as Error).message}`);
+        }
+      } else {
+        setReputationScore(null);
+        setHasNft(false);
+        setStatusMessage("Please connect your wallet.");
+      }
+    };
+
+    fetchAccountData();
+    // Re-fetch when connectedAccount changes
+  }, [connectedAccount]);
+
   const handleRevokeNft = async () => {
     if (!connectedAccount || !isCreator) {
       setStatusMessage("Only the contract creator can revoke NFTs.");
