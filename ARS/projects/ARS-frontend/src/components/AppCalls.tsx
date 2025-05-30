@@ -22,7 +22,8 @@ const AppCalls: React.FC<AppCallsProps> = ({ connectedAccount, isCreator, creato
   const [bootstrapNftId, setBootstrapNftId] = useState<string>('');
   const [bootstrapThreshold, setBootstrapThreshold] = useState<string>('');
   const [statusMessage, setStatusMessage] = useState<string>('');
-  const [hasNft, setHasNft] = useState<boolean | null>(null); // New state
+  const [hasNft, setHasNft] = useState<boolean | null>(null);
+  const [isReputableStatus, setIsReputableStatus] = useState<boolean | null>(null); // New state
 
   return (
     <div className="app-calls-container">
@@ -35,7 +36,8 @@ const AppCalls: React.FC<AppCallsProps> = ({ connectedAccount, isCreator, creato
             <p>Soulbound NFT ID: {nftId !== null ? nftId : 'N/A'}</p>
             <p>Reputation Threshold: {threshold !== null ? threshold : 'N/A'}</p>
             <p>Your Reputation Score: {reputationScore !== null ? reputationScore : 'Loading...'}</p>
-            <p>Do you have the NFT? {hasNft !== null ? (hasNft ? 'Yes' : 'No') : 'Loading...'}</p> {/* Display hasNft */}
+            <p>Do you have the NFT? {hasNft !== null ? (hasNft ? 'Yes' : 'No') : 'Loading...'}</p>
+            <p>Are you reputable? {isReputableStatus !== null ? (isReputableStatus ? 'Yes' : 'No') : 'Loading...'}</p> {/* Display reputable status */}
           </div>
           {/* ... */}
         </>
