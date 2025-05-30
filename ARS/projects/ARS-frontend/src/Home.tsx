@@ -1,7 +1,7 @@
 // src/Home.tsx
 import React, { useState, useEffect } from 'react';
-import ConnectWallet from './components/ConnectWallet'; // Import
-import Account from './components/Account';
+import ConnectWallet from './components/ConnectWallet';
+import Account from './components/Account'; // Import
 import AppCalls from './components/AppCalls';
 import { getAccountAddress } from './utils/algorand';
 
@@ -38,7 +38,7 @@ const Home: React.FC = () => {
     <div className="container">
       <header className="header">
         <h1>Reputation System dApp</h1>
-        <ConnectWallet // Render ConnectWallet
+        <ConnectWallet
           onConnect={handleConnect}
           onDisconnect={handleDisconnect}
           connectedAccount={connectedAccount}
@@ -46,7 +46,7 @@ const Home: React.FC = () => {
       </header>
 
       <main className="main-content">
-        <Account address={connectedAccount} />
+        <Account address={connectedAccount} /> {/* Render Account */}
         <AppCalls
           connectedAccount={connectedAccount}
           isCreator={isCreator}
