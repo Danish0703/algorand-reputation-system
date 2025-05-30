@@ -21,7 +21,8 @@ const AppCalls: React.FC<AppCallsProps> = ({ connectedAccount, isCreator, creato
   const [newScore, setNewScore] = useState<string>('');
   const [bootstrapNftId, setBootstrapNftId] = useState<string>('');
   const [bootstrapThreshold, setBootstrapThreshold] = useState<string>('');
-  const [statusMessage, setStatusMessage] = useState<string>(''); // New state
+  const [statusMessage, setStatusMessage] = useState<string>('');
+  const [hasNft, setHasNft] = useState<boolean | null>(null); // New state
 
   return (
     <div className="app-calls-container">
@@ -34,14 +35,9 @@ const AppCalls: React.FC<AppCallsProps> = ({ connectedAccount, isCreator, creato
             <p>Soulbound NFT ID: {nftId !== null ? nftId : 'N/A'}</p>
             <p>Reputation Threshold: {threshold !== null ? threshold : 'N/A'}</p>
             <p>Your Reputation Score: {reputationScore !== null ? reputationScore : 'Loading...'}</p>
+            <p>Do you have the NFT? {hasNft !== null ? (hasNft ? 'Yes' : 'No') : 'Loading...'}</p> {/* Display hasNft */}
           </div>
-          {isCreator && (
-            <div className="creator-actions">
-              {/* ... creator actions ... */}
-            </div>
-          )}
-          {/* User actions will go here */}
-          {statusMessage && <p className="status-message">{statusMessage}</p>} {/* Display status message */}
+          {/* ... */}
         </>
       ) : (
         <p>Please connect your wallet to interact with the contract.</p>
