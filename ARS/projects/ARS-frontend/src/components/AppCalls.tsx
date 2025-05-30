@@ -19,8 +19,9 @@ const AppCalls: React.FC<AppCallsProps> = ({ connectedAccount, isCreator, creato
   const [threshold, setThreshold] = useState<number | null>(null);
   const [targetAddress, setTargetAddress] = useState<string>('');
   const [newScore, setNewScore] = useState<string>('');
-  const [bootstrapNftId, setBootstrapNftId] = useState<string>(''); // New state
-  const [bootstrapThreshold, setBootstrapThreshold] = useState<string>(''); // New state
+  const [bootstrapNftId, setBootstrapNftId] = useState<string>('');
+  const [bootstrapThreshold, setBootstrapThreshold] = useState<string>('');
+  const [statusMessage, setStatusMessage] = useState<string>(''); // New state
 
   return (
     <div className="app-calls-container">
@@ -36,43 +37,11 @@ const AppCalls: React.FC<AppCallsProps> = ({ connectedAccount, isCreator, creato
           </div>
           {isCreator && (
             <div className="creator-actions">
-              <h3>Creator Actions</h3>
-              <div className="action-card">
-                <h4>Bootstrap Contract</h4>
-                <input
-                  type="number"
-                  placeholder="NFT ID (e.g., 123456)"
-                  value={bootstrapNftId}
-                  onChange={(e) => setBootstrapNftId(e.target.value)}
-                />
-                <input
-                  type="number"
-                  placeholder="Reputation Threshold (e.g., 80)"
-                  value={bootstrapThreshold}
-                  onChange={(e) => setBootstrapThreshold(e.target.value)}
-                />
-                <button className="button action-button">Bootstrap</button>
-              </div>
-
-              <div className="action-card">
-                <h4>Set Reputation Score</h4>
-                <input
-                  type="text"
-                  placeholder="Target Address"
-                  value={targetAddress}
-                  onChange={(e) => setTargetAddress(e.target.value)}
-                />
-                <input
-                  type="number"
-                  placeholder="New Score"
-                  value={newScore}
-                  onChange={(e) => setNewScore(e.target.value)}
-                />
-                <button className="button action-button">Set Score</button>
-              </div>
+              {/* ... creator actions ... */}
             </div>
           )}
           {/* User actions will go here */}
+          {statusMessage && <p className="status-message">{statusMessage}</p>} {/* Display status message */}
         </>
       ) : (
         <p>Please connect your wallet to interact with the contract.</p>
