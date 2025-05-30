@@ -1,6 +1,28 @@
 /* src/styles/App.css */
 /* ... existing styles ... */
+@media (max-width: 768px) {
+  .container {
+    margin: 10px;
+    padding: 15px;
+  }
 
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .connect-wallet-container {
+    width: 100%;
+    text-align: left;
+    margin-top: 15px;
+  }
+
+  .action-card input[type="text"],
+  .action-card input[type="number"],
+  .action-card .action-button {
+    width: 100%;
+  }
+}
 body {
   font-family: 'Arial', sans-serif;
   margin: 0;
