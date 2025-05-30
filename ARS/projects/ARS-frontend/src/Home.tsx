@@ -20,12 +20,43 @@ const Home: React.FC = () => {
       }
     };
     checkConnectedAccount();
-    // Listening for Pera Wallet events would ideally go here.
-  }, []); // Run once on mount
+  }, []);
+
+  const handleConnect = (accounts: string[]) => {
+    if (accounts.length > 0) {
+      setConnectedAccount(accounts[0]);
+      setIsCreator(accounts[0] === CONTRACT_CREATOR_ADDRESS);
+    }
+  };
+
+  const handleDisconnect = () => {
+    setConnectedAccount(null);
+    setIsCreator(false);
+  };
 
   return (
     <div className="container">
-      {/* ... rest of the component ... */}
+      <header className="header">
+        <h1>Reputation System dApp</h1>
+        <ConnectWallet
+          onConnect={handleConnect} // Pass handler
+          onDisconnect={handleDisconnect} // Pass handler
+          connectedAccount={connectedAccount}
+        />
+      </header>
+
+      <main className="main-content">
+        <Account address={connectedAccount} />
+        <AppCalls
+          connectedAccount={connectedAccount}
+          isCreator={isCreator}
+          creatorAddress={CONTRACT_CREATOR_ADDRESS}
+        />
+      </main>
+
+      <footer className="footer">
+        <p>&copy; 2025 Reputation System dApp</p>
+      </footer>
     </div>
   );
 };
