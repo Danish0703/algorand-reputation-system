@@ -8,15 +8,16 @@ import { getAccountAddress } from './utils/algorand';
 const CONTRACT_CREATOR_ADDRESS = "YOUR_CONTRACT_CREATOR_ADDRESS_HERE";
 
 const Home: React.FC = () => {
-  const [connectedAccount, setConnectedAccount] = useState<string | null>(null); // New state
+  const [connectedAccount, setConnectedAccount] = useState<string | null>(null);
+  const [isCreator, setIsCreator] = useState<boolean>(false); // New state
 
   return (
     <div className="container">
       <header className="header">
         <h1>Reputation System dApp</h1>
         <ConnectWallet
-          onConnect={() => {}} // Placeholder
-          onDisconnect={() => {}} // Placeholder
+          onConnect={() => {}}
+          onDisconnect={() => {}}
           connectedAccount={connectedAccount}
         />
       </header>
@@ -25,7 +26,7 @@ const Home: React.FC = () => {
         <Account address={connectedAccount} />
         <AppCalls
           connectedAccount={connectedAccount}
-          isCreator={false} // Placeholder
+          isCreator={isCreator} // Pass isCreator
           creatorAddress={CONTRACT_CREATOR_ADDRESS}
         />
       </main>
