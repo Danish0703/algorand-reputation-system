@@ -39,11 +39,7 @@ const AppCalls: React.FC<AppCallsProps> = ({ connectedAccount, isCreator, creato
           setThreshold(thres);
 
           if (nft && connectedAccount) {
-            // Check if user has NFT (placeholder, actual implementation will be more complex)
-            // For now, let's assume `has_nft` is a contract method that returns a boolean
-            // Or, more accurately, we'd need to query the asset balance.
-            // setHasNft(await callAppMethod("has_nft", [connectedAccount], connectedAccount)); // This would return a txId, not a boolean directly.
-            setHasNft(false); // Placeholder for now, proper logic needed.
+            setHasNft(false); // Placeholder
           }
 
           if (score !== null && threshold !== null) {
@@ -57,7 +53,12 @@ const AppCalls: React.FC<AppCallsProps> = ({ connectedAccount, isCreator, creato
       }
     };
     fetchContractData();
-  }, [connectedAccount]); // Rerun when connectedAccount changes
+
+    // Refresh data periodically or after transactions
+    const interval = setInterval(fetchContractData, 10000); // Refresh every 10 seconds
+    return () => clearInterval(interval); // Cleanup on unmount or dependency change
+
+  }, [connectedAccount, nftId, threshold]); // Dependencies for useEffect
 
   return (
     <div className="app-calls-container">
