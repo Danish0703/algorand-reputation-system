@@ -66,3 +66,10 @@ body {
     cursor: not-allowed;
     opacity: 0.8; /* Slightly transparent */
 }
+
+.connect-wallet-container {
+  text-align: right; /* Aligns content to the right */
+  display: flex; /* Use flex to align items if multiple */
+  align-items: center;
+  gap: 10px; /* Space between elements if any */
+}
