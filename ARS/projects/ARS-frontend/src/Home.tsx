@@ -20,7 +20,10 @@ const Home: React.FC = () => {
       }
     };
     checkConnectedAccount();
-  }, []);
+    // Listen for Pera Wallet connection/disconnection events
+    // This part requires direct PeraWalletConnect instance, or a custom event emitter
+    // For simplicity, we'll rely on periodic checks or manual refresh for now.
+  }, []); // The comment highlights the conceptual improvement. The code remains the same.
 
   const handleConnect = (accounts: string[]) => {
     if (accounts.length > 0) {
@@ -48,8 +51,8 @@ const Home: React.FC = () => {
       <main className="main-content">
         <Account address={connectedAccount} />
         <AppCalls
-          connectedAccount={connectedAccount} // Pass connectedAccount
-          isCreator={isCreator} // Pass isCreator
+          connectedAccount={connectedAccount}
+          isCreator={isCreator}
           creatorAddress={CONTRACT_CREATOR_ADDRESS}
         />
       </main>
