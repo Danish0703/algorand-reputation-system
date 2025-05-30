@@ -73,3 +73,9 @@ body {
   align-items: center;
   gap: 10px; /* Space between elements if any */
 }
+.account-info, .app-calls-container {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05); /* Subtle inner shadow */
+}
