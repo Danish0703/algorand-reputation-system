@@ -14,59 +14,48 @@ interface AppCallsProps {
 }
 
 const AppCalls: React.FC<AppCallsProps> = ({ connectedAccount, isCreator, creatorAddress }) => {
-  // ... existing states ...
+  // ... existing states and creator action handlers ...
 
-  const handleBootstrap = async () => { /* ... */ };
-
-  const handleSetScore = async () => {
-    if (!connectedAccount || !isCreator) {
-      setStatusMessage("Only the contract creator can set scores.");
+  const handleMintNft = async () => {
+    if (!connectedAccount) {
+      setStatusMessage("Please connect your wallet.");
       return;
     }
-    if (!targetAddress || !newScore) {
-      setStatusMessage("Please enter target address and new score.");
-      return;
-    }
-    setStatusMessage("Setting score...");
+    setStatusMessage("Attempting to mint NFT...");
     try {
-      const txResponse = await callAppMethod("set_score", [targetAddress, parseInt(newScore)], connectedAccount);
-      setStatusMessage(`Score set! Transaction ID: ${txResponse.txId}`);
-      // Refresh score if it was for the current user
-      if (targetAddress === connectedAccount) {
-        const score = await getReputationScore(connectedAccount, connectedAccount);
-        setReputationScore(score);
-      }
+      // In a real dApp, user needs to opt-in to the NFT asset before minting.
+      // This example assumes opt-in is handled or not required for contract.
+      const txResponse = await callAppMethod("mint_nft", [], connectedAccount); // No args needed for mint_nft
+      setStatusMessage(`NFT minted! Transaction ID: ${txResponse.txId}`);
+      // Refresh has_nft status
+      setHasNft(true); // Assuming success
     } catch (error) {
-      console.error("Error setting score:", error);
-      setStatusMessage(`Error setting score: ${(error as Error).message}`);
+      console.error("Error minting NFT:", error);
+      setStatusMessage(`Error minting NFT: ${(error as Error).message}`);
     }
   };
 
   return (
     <div className="app-calls-container">
-      {/* ... existing UI ... */}
-      {isCreator && (
-        <div className="creator-actions">
-          {/* ... bootstrap card ... */}
-          <div className="action-card">
-            <h4>Set Reputation Score</h4>
-            <input
-              type="text"
-              placeholder="Target Address"
-              value={targetAddress}
-              onChange={(e) => setTargetAddress(e.target.value)}
-            />
-            <input
-              type="number"
-              placeholder="New Score"
-              value={newScore}
-              onChange={(e) => setNewScore(e.target.value)}
-            />
-            <button onClick={handleSetScore} className="button action-button">Set Score</button>
+      {/* ... existing UI and creator actions ... */}
+      {connectedAccount ? (
+        <>
+          {/* ... contract info and creator actions ... */}
+          <div className="user-actions">
+            <h3>User Actions</h3>
+            <button
+              onClick={handleMintNft}
+              // Disabled logic will be refined later
+              className="button action-button"
+            >
+              Mint Soulbound NFT
+            </button>
           </div>
-        </div>
+          {statusMessage && <p className="status-message">{statusMessage}</p>}
+        </>
+      ) : (
+        <p>Please connect your wallet to interact with the contract.</p>
       )}
-      {/* ... rest of the component ... */}
     </div>
   );
 };
