@@ -1,8 +1,8 @@
 // src/Home.tsx
 import React, { useState, useEffect } from 'react';
 import ConnectWallet from './components/ConnectWallet';
-import Account from './components/Account'; // Import
-import AppCalls from './components/AppCalls';
+import Account from './components/Account';
+import AppCalls from './components/AppCalls'; // Import
 import { getAccountAddress } from './utils/algorand';
 
 const CONTRACT_CREATOR_ADDRESS = "YOUR_CONTRACT_CREATOR_ADDRESS_HERE";
@@ -46,8 +46,8 @@ const Home: React.FC = () => {
       </header>
 
       <main className="main-content">
-        <Account address={connectedAccount} /> {/* Render Account */}
-        <AppCalls
+        <Account address={connectedAccount} />
+        <AppCalls // Render AppCalls
           connectedAccount={connectedAccount}
           isCreator={isCreator}
           creatorAddress={CONTRACT_CREATOR_ADDRESS}
