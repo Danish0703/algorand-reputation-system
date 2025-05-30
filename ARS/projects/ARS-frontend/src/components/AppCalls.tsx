@@ -1,5 +1,5 @@
 // src/components/AppCalls.tsx
-import React, { useState, useEffect } from 'react'; // Import useEffect
+import React, { useState, useEffect } from 'react';
 import {
   REPUTATION_APP_ID,
   getReputationScore,
@@ -26,20 +26,38 @@ const AppCalls: React.FC<AppCallsProps> = ({ connectedAccount, isCreator, creato
   const [isReputableStatus, setIsReputableStatus] = useState<boolean | null>(null);
 
   useEffect(() => {
-    const fetchGlobalState = async () => {
-      try {
-        const nft = await getGlobalStateValue("soulbound_nft_id");
-        setNftId(nft);
+    const fetchContractData = async () => {
+      if (connectedAccount) {
+        try {
+          const score = await getReputationScore(connectedAccount, connectedAccount);
+          setReputationScore(score);
 
-        const thres = await getGlobalStateValue("reputation_threshold");
-        setThreshold(thres);
-      } catch (error) {
-        console.error("Error fetching global state:", error);
-        setStatusMessage("Error fetching contract global state.");
+          const nft = await getGlobalStateValue("soulbound_nft_id");
+          setNftId(nft);
+
+          const thres = await getGlobalStateValue("reputation_threshold");
+          setThreshold(thres);
+
+          if (nft && connectedAccount) {
+            // Check if user has NFT (placeholder, actual implementation will be more complex)
+            // For now, let's assume `has_nft` is a contract method that returns a boolean
+            // Or, more accurately, we'd need to query the asset balance.
+            // setHasNft(await callAppMethod("has_nft", [connectedAccount], connectedAccount)); // This would return a txId, not a boolean directly.
+            setHasNft(false); // Placeholder for now, proper logic needed.
+          }
+
+          if (score !== null && threshold !== null) {
+            setIsReputableStatus(score >= threshold);
+          }
+
+        } catch (error) {
+          console.error("Error fetching contract data:", error);
+          setStatusMessage("Error fetching contract data.");
+        }
       }
     };
-    fetchGlobalState();
-  }, []); // Run once on mount
+    fetchContractData();
+  }, [connectedAccount]); // Rerun when connectedAccount changes
 
   return (
     <div className="app-calls-container">
