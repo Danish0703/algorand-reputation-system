@@ -16,29 +16,29 @@ interface AppCallsProps {
 const AppCalls: React.FC<AppCallsProps> = ({ connectedAccount, isCreator, creatorAddress }) => {
   // ... existing states ...
 
-  const handleBootstrap = async () => {
+  const handleBootstrap = async () => { /* ... */ };
+
+  const handleSetScore = async () => {
     if (!connectedAccount || !isCreator) {
-      setStatusMessage("Only the contract creator can bootstrap.");
+      setStatusMessage("Only the contract creator can set scores.");
       return;
     }
-    if (!bootstrapNftId || !bootstrapThreshold) {
-      setStatusMessage("Please enter NFT ID and Threshold to bootstrap.");
+    if (!targetAddress || !newScore) {
+      setStatusMessage("Please enter target address and new score.");
       return;
     }
-
-    setStatusMessage("Bootstrapping contract...");
+    setStatusMessage("Setting score...");
     try {
-      const txResponse = await callAppMethod("bootstrap", [parseInt(bootstrapNftId), parseInt(bootstrapThreshold)], connectedAccount);
-      setStatusMessage(`Contract bootstrapped! Transaction ID: ${txResponse.txId}`);
-      // Refresh global state values after bootstrap
-      const nft = await getGlobalStateValue("soulbound_nft_id");
-      setNftId(nft);
-      const thres = await getGlobalStateValue("reputation_threshold");
-      setThreshold(thres);
-
+      const txResponse = await callAppMethod("set_score", [targetAddress, parseInt(newScore)], connectedAccount);
+      setStatusMessage(`Score set! Transaction ID: ${txResponse.txId}`);
+      // Refresh score if it was for the current user
+      if (targetAddress === connectedAccount) {
+        const score = await getReputationScore(connectedAccount, connectedAccount);
+        setReputationScore(score);
+      }
     } catch (error) {
-      console.error("Error bootstrapping:", error);
-      setStatusMessage(`Error bootstrapping: ${(error as Error).message}`);
+      console.error("Error setting score:", error);
+      setStatusMessage(`Error setting score: ${(error as Error).message}`);
     }
   };
 
@@ -47,24 +47,23 @@ const AppCalls: React.FC<AppCallsProps> = ({ connectedAccount, isCreator, creato
       {/* ... existing UI ... */}
       {isCreator && (
         <div className="creator-actions">
-          <h3>Creator Actions</h3>
+          {/* ... bootstrap card ... */}
           <div className="action-card">
-            <h4>Bootstrap Contract</h4>
+            <h4>Set Reputation Score</h4>
             <input
-              type="number"
-              placeholder="NFT ID (e.g., 123456)"
-              value={bootstrapNftId}
-              onChange={(e) => setBootstrapNftId(e.target.value)}
+              type="text"
+              placeholder="Target Address"
+              value={targetAddress}
+              onChange={(e) => setTargetAddress(e.target.value)}
             />
             <input
               type="number"
-              placeholder="Reputation Threshold (e.g., 80)"
-              value={bootstrapThreshold}
-              onChange={(e) => setBootstrapThreshold(e.target.value)}
+              placeholder="New Score"
+              value={newScore}
+              onChange={(e) => setNewScore(e.target.value)}
             />
-            <button onClick={handleBootstrap} className="button action-button">Bootstrap</button>
+            <button onClick={handleSetScore} className="button action-button">Set Score</button>
           </div>
-          {/* ... other creator actions ... */}
         </div>
       )}
       {/* ... rest of the component ... */}
