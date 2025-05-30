@@ -130,3 +130,10 @@ body {
     color: #dc3545;
     border: 1px solid #f5c6cb; /* Added border for errors */
 }
+.hint {
+    font-size: 0.85em;
+    color: #666;
+    margin-top: 5px;
+    text-align: center;
+    font-style: italic; /* Added italic for hints */
+}
