@@ -32,16 +32,16 @@ export const callAppMethod = async (
 ) => {
   try {
     const suggestedParams = await algodClient.getTransactionParams().do();
-    // ABI method names are typically passed as a string and encoded
-    // Arguments need to be encoded based on their ABI type.
-    // For simplicity, this example assumes uint64 args or address bytes for the appArgs.
     const appArgs = args.map((arg) => {
+      // Correctly encode arguments based on expected ABI types
       if (typeof arg === 'number') {
-        return algosdk.encodeUint64(arg);
-      } else if (algosdk.isValidAddress(arg)) {
-        return algosdk.decodeAddress(arg).publicKey;
+        return algosdk.encodeUint64(arg); // For abi.Uint64
+      } else if (typeof arg === 'string' && algosdk.isValidAddress(arg)) {
+        return algosdk.decodeAddress(arg).publicKey; // For abi.Address
+      } else if (typeof arg === 'string') {
+        return new Uint8Array(Buffer.from(arg)); // For abi.Byte, abi.String
       }
-      return arg; // Fallback for other types, though ABI calls need specific handling
+      return arg; // Fallback, but ideally all args are handled
     });
 
     const comp = algosdk.makeApplicationCallTxnFromObject({
@@ -49,7 +49,7 @@ export const callAppMethod = async (
       appIndex: REPUTATION_APP_ID,
       onComplete: algosdk.OnApplicationComplete.NoOpOC,
       suggestedParams: suggestedParams,
-      appArgs: [new Uint8Array(Buffer.from(method)), ...appArgs], // Method name as first arg
+      appArgs: [new Uint8Array(Buffer.from(method)), ...appArgs],
     });
 
     const txns = [comp];
@@ -61,7 +61,7 @@ export const callAppMethod = async (
     ]);
 
     const txResponse = await algodClient.sendRawTransaction(signedTxns.map(t => t.blob)).do();
-    return txResponse; // Return the full response for txId
+    return txResponse;
   } catch (error) {
     console.error(`Error calling ${method}:`, error);
     throw error;
@@ -85,11 +85,6 @@ export const getGlobalStateValue = async (key: string): Promise<any> => {
 };
 
 export const getReputationScore = async (address: string, senderAddress: string): Promise<number | null> => {
-  // This function is already quite specific for get_score and uses makeApplicationCallTxnFromObject,
-  // which is an improvement over the generic makeApplicationNoOpTxn if you need more control
-  // over specific ABI method arguments. The generic `callAppMethod` can be used for simpler NoOp calls
-  // or when not expecting a direct ABI return from logs.
-  // The `getReputationScore` implementation here already uses an explicit ABI call setup.
   try {
     const suggestedParams = await algodClient.getTransactionParams().do();
     const methodArgs = {
@@ -118,7 +113,6 @@ export const getReputationScore = async (address: string, senderAddress: string)
 
     const logs = result["logs"];
     if (logs && logs.length > 0) {
-      // Assuming the last log is the ABI return value
       const decodedReturn = new Uint8Array(Buffer.from(logs[logs.length - 1], 'base64'));
       return new algosdk.ABI.Uint(64).decode(decodedReturn);
     }
