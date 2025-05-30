@@ -33,15 +33,14 @@ export const callAppMethod = async (
   try {
     const suggestedParams = await algodClient.getTransactionParams().do();
     const appArgs = args.map((arg) => {
-      // Correctly encode arguments based on expected ABI types
       if (typeof arg === 'number') {
-        return algosdk.encodeUint64(arg); // For abi.Uint64
+        return algosdk.encodeUint64(arg);
       } else if (typeof arg === 'string' && algosdk.isValidAddress(arg)) {
-        return algosdk.decodeAddress(arg).publicKey; // For abi.Address
+        return algosdk.decodeAddress(arg).publicKey;
       } else if (typeof arg === 'string') {
-        return new Uint8Array(Buffer.from(arg)); // For abi.Byte, abi.String
+        return new Uint8Array(Buffer.from(arg));
       }
-      return arg; // Fallback, but ideally all args are handled
+      return arg;
     });
 
     const comp = algosdk.makeApplicationCallTxnFromObject({
@@ -88,32 +87,34 @@ export const getReputationScore = async (address: string, senderAddress: string)
   try {
     const suggestedParams = await algodClient.getTransactionParams().do();
     const methodArgs = {
-      name: "get_score",
-      args: [algosdk.decodeAddress(address).publicKey],
+        name: "get_score",
+        args: [algosdk.decodeAddress(address).publicKey],
     };
 
     const comp = algosdk.makeApplicationCallTxnFromObject({
-      from: senderAddress,
-      appIndex: REPUTATION_APP_ID,
-      onComplete: algosdk.OnApplicationComplete.NoOpOC,
-      suggestedParams: suggestedParams,
-      appArgs: [new Uint8Array(Buffer.from(methodArgs.name)), methodArgs.args[0]],
+        from: senderAddress,
+        appIndex: REPUTATION_APP_ID,
+        onComplete: algosdk.OnApplicationComplete.NoOpOC,
+        suggestedParams: suggestedParams,
+        appArgs: [new Uint8Array(Buffer.from(methodArgs.name)), methodArgs.args[0]],
     });
 
     const txns = [comp];
     const signedTxns = await peraWallet.signTransaction([
-      {
-        txn: comp.toByte(),
-        signers: [senderAddress],
-      },
+        {
+            txn: comp.toByte(),
+            signers: [senderAddress],
+        },
     ]);
 
-    const { txId } = await algodClient.sendRawTransaction(signedTxns.map(t => t.blob)).do();
+    const {txId} = await algodClient.sendRawTransaction(signedTxns.map(t => t.blob)).do();
     const result = await algosdk.waitForConfirmation(algodClient, txId, 4);
 
     const logs = result["logs"];
     if (logs && logs.length > 0) {
+      // The last log entry is typically the ABI return value
       const decodedReturn = new Uint8Array(Buffer.from(logs[logs.length - 1], 'base64'));
+      // Assuming 'get_score' returns abi.Uint64
       return new algosdk.ABI.Uint(64).decode(decodedReturn);
     }
     return null;
