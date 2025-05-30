@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import ConnectWallet from './components/ConnectWallet';
 import Account from './components/Account';
-import AppCalls from './components/AppCalls'; // Import
+import AppCalls from './components/AppCalls';
 import { getAccountAddress } from './utils/algorand';
 
 const CONTRACT_CREATOR_ADDRESS = "YOUR_CONTRACT_CREATOR_ADDRESS_HERE";
@@ -47,9 +47,9 @@ const Home: React.FC = () => {
 
       <main className="main-content">
         <Account address={connectedAccount} />
-        <AppCalls // Render AppCalls
-          connectedAccount={connectedAccount}
-          isCreator={isCreator}
+        <AppCalls
+          connectedAccount={connectedAccount} // Pass connectedAccount
+          isCreator={isCreator} // Pass isCreator
           creatorAddress={CONTRACT_CREATOR_ADDRESS}
         />
       </main>
