@@ -14,48 +14,50 @@ interface AppCallsProps {
 }
 
 const AppCalls: React.FC<AppCallsProps> = ({ connectedAccount, isCreator, creatorAddress }) => {
-  // ... existing states and creator action handlers ...
+  // ... existing states and other action handlers ...
 
-  const handleMintNft = async () => {
-    if (!connectedAccount) {
-      setStatusMessage("Please connect your wallet.");
+  const handleRevokeNft = async () => {
+    if (!connectedAccount || !isCreator) {
+      setStatusMessage("Only the contract creator can revoke NFTs.");
       return;
     }
-    setStatusMessage("Attempting to mint NFT...");
+    if (!targetAddress) { // Using same targetAddress state for simplicity
+      setStatusMessage("Please enter target address to revoke NFT from.");
+      return;
+    }
+    setStatusMessage("Revoking NFT...");
     try {
-      // In a real dApp, user needs to opt-in to the NFT asset before minting.
-      // This example assumes opt-in is handled or not required for contract.
-      const txResponse = await callAppMethod("mint_nft", [], connectedAccount); // No args needed for mint_nft
-      setStatusMessage(`NFT minted! Transaction ID: ${txResponse.txId}`);
-      // Refresh has_nft status
-      setHasNft(true); // Assuming success
+      const txResponse = await callAppMethod("revoke_nft", [targetAddress], connectedAccount);
+      setStatusMessage(`NFT revoked! Transaction ID: ${txResponse.txId}`);
+      // Refresh has_nft status if it was for the current user
+      if (targetAddress === connectedAccount) {
+        setHasNft(false); // Assuming success
+      }
     } catch (error) {
-      console.error("Error minting NFT:", error);
-      setStatusMessage(`Error minting NFT: ${(error as Error).message}`);
+      console.error("Error revoking NFT:", error);
+      setStatusMessage(`Error revoking NFT: ${(error as Error).message}`);
     }
   };
 
   return (
     <div className="app-calls-container">
-      {/* ... existing UI and creator actions ... */}
-      {connectedAccount ? (
-        <>
-          {/* ... contract info and creator actions ... */}
-          <div className="user-actions">
-            <h3>User Actions</h3>
-            <button
-              onClick={handleMintNft}
-              // Disabled logic will be refined later
-              className="button action-button"
-            >
-              Mint Soulbound NFT
-            </button>
+      {/* ... existing UI ... */}
+      {isCreator && (
+        <div className="creator-actions">
+          {/* ... bootstrap and set score cards ... */}
+          <div className="action-card">
+            <h4>Revoke Soulbound NFT</h4>
+            <input
+              type="text"
+              placeholder="Target Address to Revoke"
+              value={targetAddress}
+              onChange={(e) => setTargetAddress(e.target.value)}
+            />
+            <button onClick={handleRevokeNft} className="button action-button">Revoke NFT</button>
           </div>
-          {statusMessage && <p className="status-message">{statusMessage}</p>}
-        </>
-      ) : (
-        <p>Please connect your wallet to interact with the contract.</p>
+        </div>
       )}
+      {/* ... user actions and status message ... */}
     </div>
   );
 };
