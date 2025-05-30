@@ -15,6 +15,11 @@ interface AppCallsProps {
 
 const AppCalls: React.FC<AppCallsProps> = ({ connectedAccount, isCreator, creatorAddress }) => {
   // ... existing states and other action handlers ...
+  const [reputationScore, setReputationScore] = useState<number | null>(null);
+  const [hasNft, setHasNft] = useState<boolean>(false);
+  const [statusMessage, setStatusMessage] = useState<string>('');
+  const [targetAddress, setTargetAddress] = useState<string>(''); // For Bootstrap, Set Score, Revoke NFT
+  const [scoreValue, setScoreValue] = useState<number>(0); // For setting reputation score
 
   const handleRevokeNft = async () => {
     if (!connectedAccount || !isCreator) {
