@@ -79,3 +79,8 @@ body {
   border-radius: 8px;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05); /* Subtle inner shadow */
 }
+.app-calls-container h2, .app-calls-container h3, .app-calls-container h4 {
+  color: #34495e; /* Darker text color for headings */
+  margin-top: 0;
+  margin-bottom: 15px;
+}
