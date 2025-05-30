@@ -17,8 +17,10 @@ const AppCalls: React.FC<AppCallsProps> = ({ connectedAccount, isCreator, creato
   const [reputationScore, setReputationScore] = useState<number | null>(null);
   const [nftId, setNftId] = useState<number | null>(null);
   const [threshold, setThreshold] = useState<number | null>(null);
-  const [targetAddress, setTargetAddress] = useState<string>(''); // New state
-  const [newScore, setNewScore] = useState<string>(''); // New state
+  const [targetAddress, setTargetAddress] = useState<string>('');
+  const [newScore, setNewScore] = useState<string>('');
+  const [bootstrapNftId, setBootstrapNftId] = useState<string>(''); // New state
+  const [bootstrapThreshold, setBootstrapThreshold] = useState<string>(''); // New state
 
   return (
     <div className="app-calls-container">
@@ -35,6 +37,23 @@ const AppCalls: React.FC<AppCallsProps> = ({ connectedAccount, isCreator, creato
           {isCreator && (
             <div className="creator-actions">
               <h3>Creator Actions</h3>
+              <div className="action-card">
+                <h4>Bootstrap Contract</h4>
+                <input
+                  type="number"
+                  placeholder="NFT ID (e.g., 123456)"
+                  value={bootstrapNftId}
+                  onChange={(e) => setBootstrapNftId(e.target.value)}
+                />
+                <input
+                  type="number"
+                  placeholder="Reputation Threshold (e.g., 80)"
+                  value={bootstrapThreshold}
+                  onChange={(e) => setBootstrapThreshold(e.target.value)}
+                />
+                <button className="button action-button">Bootstrap</button>
+              </div>
+
               <div className="action-card">
                 <h4>Set Reputation Score</h4>
                 <input
@@ -53,7 +72,7 @@ const AppCalls: React.FC<AppCallsProps> = ({ connectedAccount, isCreator, creato
               </div>
             </div>
           )}
-          {/* Interaction UIs will go here */}
+          {/* User actions will go here */}
         </>
       ) : (
         <p>Please connect your wallet to interact with the contract.</p>
