@@ -114,3 +114,19 @@ body {
 .action-card .action-button:hover {
   background-color: #45a049;
 }
+.status-message {
+  background-color: #e7f3e7;
+  color: #28a745;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 20px;
+  text-align: center;
+  font-weight: bold;
+  border: 1px solid #c3e6cb; /* Added border */
+}
+
+.status-message.error {
+    background-color: #f8d7da;
+    color: #dc3545;
+    border: 1px solid #f5c6cb; /* Added border for errors */
+}
