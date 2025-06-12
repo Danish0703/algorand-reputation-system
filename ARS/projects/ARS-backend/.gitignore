@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+.venv/
+venv/
+
+# Ignore .env files for security
+*.env
+
+# IDEs
+.idea/
+.vscode/
+
+# Models (generated files, not source code)
+models/
