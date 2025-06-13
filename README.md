@@ -97,7 +97,7 @@ In the Web3 landscape, trust is paramount yet often elusive. Our system addresse
 
 ## 📽 Demo
 
-> 🔗 **[Watch the Demo Video]([https://drive.google.com/file/d/1Vl-EtcNIqlm0Xex-sawuhdJD43RuBw54/view])**  
+> 🔗 **[Watch the Demo Video]([https://drive.google.com/file/d/1Vl-EtcNIqlm0Xex-sawuhdJD43RuBw54/view])** : https://drive.google.com/file/d/1Vl-EtcNIqlm0Xex-sawuhdJD43RuBw54/view
 > 📸 Screenshots and flow diagram below ⬇️
 
 ![Demo Screenshot](![image](https://github.com/user-attachments/assets/d3485209-21ee-4077-8f9e-765d88e83e49)
