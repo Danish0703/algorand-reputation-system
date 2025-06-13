@@ -14,12 +14,10 @@ type = 'contract'
 name = 'ARS-contracts'
 artifacts = 'smart_contracts/artifacts'
 
-[project.deploy]
-command = "poetry run python -m smart_contracts deploy"
-environment_secrets = [
-  "DEPLOYER_MNEMONIC",
-  "DISPENSER_MNEMONIC",
-]
+[deploy]
+default = "poetry run python -m smart_contracts.deploy"
+environment_secrets = ["DEPLOYER_MNEMONIC", "DISPENSER_MNEMONIC"]
+
 
 [project.deploy.localnet]
 environment_secrets = []
