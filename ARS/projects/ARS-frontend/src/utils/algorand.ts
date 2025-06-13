@@ -87,27 +87,27 @@ export const getReputationScore = async (address: string, senderAddress: string)
   try {
     const suggestedParams = await algodClient.getTransactionParams().do();
     const methodArgs = {
-        name: "get_score",
-        args: [algosdk.decodeAddress(address).publicKey],
+      name: "get_score",
+      args: [algosdk.decodeAddress(address).publicKey],
     };
 
     const comp = algosdk.makeApplicationCallTxnFromObject({
-        from: senderAddress,
-        appIndex: REPUTATION_APP_ID,
-        onComplete: algosdk.OnApplicationComplete.NoOpOC,
-        suggestedParams: suggestedParams,
-        appArgs: [new Uint8Array(Buffer.from(methodArgs.name)), methodArgs.args[0]],
+      from: senderAddress,
+      appIndex: REPUTATION_APP_ID,
+      onComplete: algosdk.OnApplicationComplete.NoOpOC,
+      suggestedParams: suggestedParams,
+      appArgs: [new Uint8Array(Buffer.from(methodArgs.name)), methodArgs.args[0]],
     });
 
     const txns = [comp];
     const signedTxns = await peraWallet.signTransaction([
-        {
-            txn: comp.toByte(),
-            signers: [senderAddress],
-        },
+      {
+        txn: comp.toByte(),
+        signers: [senderAddress],
+      },
     ]);
 
-    const {txId} = await algodClient.sendRawTransaction(signedTxns.map(t => t.blob)).do();
+    const { txId } = await algodClient.sendRawTransaction(signedTxns.map(t => t.blob)).do();
     const result = await algosdk.waitForConfirmation(algodClient, txId, 4);
 
     const logs = result["logs"];
