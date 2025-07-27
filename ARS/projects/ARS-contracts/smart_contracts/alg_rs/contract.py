@@ -7,13 +7,13 @@ class ReputationContract(ARC4Contract):
     soulbound_nft_id: GlobalStateValue[abi.Uint64]
     reputation_threshold: GlobalStateValue[abi.Uint64]
     reputation_scores: GlobalStateValue[abi.Address, abi.Uint64]
-    score_update_count: GlobalStateValue[abi.Address, abi.Uint64]  # ✅ NEW
+    score_update_count: GlobalStateValue[abi.Address, abi.Uint64]  
 
     def __init__(self):
         self.soulbound_nft_id = GlobalStateValue()
         self.reputation_threshold = GlobalStateValue()
         self.reputation_scores = GlobalStateValue()
-        self.score_update_count = GlobalStateValue()  # ✅ NEW
+        self.score_update_count = GlobalStateValue()  
 
     @arc4.abimethod
     def bootstrap(self, nft_id: abi.Uint64, threshold: abi.Uint64) -> abi.String:
@@ -30,7 +30,7 @@ class ReputationContract(ARC4Contract):
         assert self.sender == self.creator, "Only creator can set scores"
         self.reputation_scores[address].set(score)
 
-        # ✅ Track how many times score has been set
+        # Track how many times score has been set
         count = self.score_update_count[address].get()
         self.score_update_count[address].set(count + 1)
 
