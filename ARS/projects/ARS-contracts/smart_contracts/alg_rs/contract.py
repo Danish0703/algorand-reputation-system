@@ -7,23 +7,25 @@ class ReputationContract(ARC4Contract):
     soulbound_nft_id: GlobalStateValue[abi.Uint64]
     reputation_threshold: GlobalStateValue[abi.Uint64]
     reputation_scores: GlobalStateValue[abi.Address, abi.Uint64]
-    score_update_count: GlobalStateValue[abi.Address, abi.Uint64]             
-    last_mint_time: GlobalStateValue[abi.Address, abi.Uint64]                 
-    mint_cooldown_secs: GlobalStateValue[abi.Uint64]                          
+    score_update_count: GlobalStateValue[abi.Address, abi.Uint64]
+    last_mint_time: GlobalStateValue[abi.Address, abi.Uint64]
+    mint_cooldown_secs: GlobalStateValue[abi.Uint64]
+    approved_delegates: GlobalStateValue[abi.Address, abi.Bool]  
 
     def __init__(self):
         self.soulbound_nft_id = GlobalStateValue()
         self.reputation_threshold = GlobalStateValue()
         self.reputation_scores = GlobalStateValue()
-        self.score_update_count = GlobalStateValue()     
-        self.last_mint_time = GlobalStateValue()          
-        self.mint_cooldown_secs = GlobalStateValue()       
+        self.score_update_count = GlobalStateValue()
+        self.last_mint_time = GlobalStateValue()
+        self.mint_cooldown_secs = GlobalStateValue()
+        self.approved_delegates = GlobalStateValue()  
 
     @arc4.abimethod
     def bootstrap(self, nft_id: abi.Uint64, threshold: abi.Uint64, cooldown_secs: abi.Uint64) -> abi.String:
         self.soulbound_nft_id.set(nft_id)
         self.reputation_threshold.set(threshold)
-        self.mint_cooldown_secs.set(cooldown_secs)  
+        self.mint_cooldown_secs.set(cooldown_secs)
         return "Reputation contract initialized"
 
     @arc4.abimethod
@@ -55,10 +57,8 @@ class ReputationContract(ARC4Contract):
         user = self.sender
         score = self.reputation_scores[user].get()
         threshold = self.reputation_threshold.get()
-
         assert score >= threshold, "Insufficient reputation to mint NFT"
 
-        # ✅ Commit 2: Check cooldown
         last_time = self.last_mint_time[user].get()
         cooldown = self.mint_cooldown_secs.get()
         now = Global.latest_timestamp()
@@ -71,8 +71,7 @@ class ReputationContract(ARC4Contract):
             asset_amount=1
         ).submit()
 
-        self.last_mint_time[user].set(now)  
-
+        self.last_mint_time[user].set(now)
         return "Soulbound NFT minted"
 
     @arc4.abimethod
@@ -95,3 +94,18 @@ class ReputationContract(ARC4Contract):
         score = self.reputation_scores[address].get()
         threshold = self.reputation_threshold.get()
         return score >= threshold
+
+    # Creator can approve or revoke delegates
+    @arc4.abimethod
+    def approve_delegate(self, delegate: abi.Address, status: abi.Bool) -> abi.String:
+        assert self.sender == self.creator, "Only creator can manage delegates"
+        self.approved_delegates[delegate].set(status)
+        return "Delegate approval updated"
+
+    # Delegate can boost a user's reputation score
+    @arc4.abimethod
+    def delegate_boost(self, target: abi.Address, boost: abi.Uint64) -> abi.String:
+        assert self.approved_delegates[self.sender].get(), "Not an approved delegate"
+        score = self.reputation_scores[target].get()
+        self.reputation_scores[target].set(score + boost)
+        return "Reputation boosted"
