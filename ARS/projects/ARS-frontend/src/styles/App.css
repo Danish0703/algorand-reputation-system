@@ -1,178 +1,182 @@
 /* src/styles/App.css */
-/* ... existing styles ... */
-@media (max-width: 768px) {
-  .container {
-    margin: 10px;
-    padding: 15px;
-  }
-
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .connect-wallet-container {
-    width: 100%;
-    text-align: left;
-    margin-top: 15px;
-  }
-
-  .action-card input[type="text"],
-  .action-card input[type="number"],
-  .action-card .action-button {
-    width: 100%;
-  }
-}
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: 'Poppins', sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f4f7f6;
+  background-color: #f0f2f5;
   color: #333;
 }
 
 .container {
-  max-width: 960px;
-  margin: 20px auto;
-  padding: 20px;
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 30px;
   background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #eee;
+  margin-bottom: 40px;
+  padding-bottom: 25px;
+  border-bottom: 2px solid #e0e4e8;
 }
 
 .header h1 {
-  color: #2c3e50;
+  color: #1f2a40;
   margin: 0;
+  font-weight: 600;
+  font-size: 2.5rem;
 }
 
 .main-content {
   display: grid;
-  grid-template-columns: 1fr; /* Single column layout for now */
+  grid-template-columns: 1fr;
   gap: 30px;
 }
 
 .footer {
   text-align: center;
-  margin-top: 40px;
-  padding-top: 20px;
-  border-top: 1px solid #eee;
-  color: #777;
+  margin-top: 50px;
+  padding-top: 25px;
+  border-top: 1px solid #e0e4e8;
+  color: #888;
   font-size: 0.9em;
 }
+
 .button {
-  background-color: #007bff; /* Primary button color */
+  background-color: #1f2a40;
   color: white;
-  padding: 10px 20px;
+  padding: 12px 24px;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .button:hover {
-  background-color: #0056b3;
+  background-color: #2c3e50;
+  transform: translateY(-2px);
 }
 
 .button:disabled {
-    background-color: #cccccc; /* Greyed out for disabled */
-    cursor: not-allowed;
-    opacity: 0.8; /* Slightly transparent */
+  background-color: #cccccc;
+  cursor: not-allowed;
+  transform: none;
 }
 
 .connect-wallet-container {
-  text-align: right; /* Aligns content to the right */
-  display: flex; /* Use flex to align items if multiple */
+  display: flex;
   align-items: center;
-  gap: 10px; /* Space between elements if any */
+  gap: 15px;
 }
+
 .account-info, .app-calls-container {
-  background-color: #f9f9f9;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05); /* Subtle inner shadow */
+  background-color: #f9fafb;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.03);
 }
+
 .app-calls-container h2, .app-calls-container h3, .app-calls-container h4 {
-  color: #34495e; /* Darker text color for headings */
+  color: #34495e;
   margin-top: 0;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  font-weight: 600;
 }
+
 .contract-info p {
-  margin: 5px 0; /* Reduced margin for compact info */
-  font-size: 0.95em; /* Slightly smaller font */
+  margin: 8px 0;
+  font-size: 0.95em;
+  color: #555;
 }
+
 .action-card {
   background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  padding: 15px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Added outer shadow for separation */
+  border: 1px solid #e0e4e8;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
 .action-card input[type="text"],
 .action-card input[type="number"] {
-  width: calc(100% - 20px); /* Adjusted width to fit padding better */
-  padding: 10px;
-  margin-bottom: 10px;
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.action-card input[type="text"]:focus,
+.action-card input[type="number"]:focus {
+  outline: none;
+  border-color: #1f2a40;
 }
 
 .action-card .action-button {
   width: 100%;
-  background-color: #4CAF50; /* A distinct green for creator actions */
+  background-color: #27ae60;
+  transition: background-color 0.3s ease;
 }
 
 .action-card .action-button:hover {
-  background-color: #45a049;
+  background-color: #219d55;
 }
+
 .status-message {
-  background-color: #e7f3e7;
-  color: #28a745;
-  padding: 10px;
-  border-radius: 5px;
-  margin-top: 20px;
+  background-color: #e8f5e9;
+  color: #27ae60;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 25px;
   text-align: center;
   font-weight: bold;
-  border: 1px solid #c3e6cb; /* Added border */
+  border: 1px solid #c8e6c9;
 }
 
 .status-message.error {
-    background-color: #f8d7da;
-    color: #dc3545;
-    border: 1px solid #f5c6cb; /* Added border for errors */
+  background-color: #fcebeb;
+  color: #c0392b;
+  border: 1px solid #f5c6cb;
 }
+
 .hint {
-    font-size: 0.85em;
-    color: #666;
-    margin-top: 5px;
-    text-align: center;
-    font-style: italic; /* Added italic for hints */
+  font-size: 0.85em;
+  color: #999;
+  margin-top: 10px;
+  text-align: center;
+  font-style: italic;
 }
 
-body {
-  font-family: 'Arial', sans-serif; /* Defined font family */
-  margin: 0;
-  padding: 0;
-  background-color: #f4f7f6; /* Light background */
-  color: #333; /* Default text color */
+/* Media Queries for responsiveness */
+@media (max-width: 768px) {
+  .container {
+    margin: 20px;
+    padding: 20px;
+  }
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .connect-wallet-container {
+    width: 100%;
+    margin-top: 15px;
+  }
+  .action-card input[type="text"],
+  .action-card input[type="number"],
+  .action-card .action-button {
+    width: 100%;
+  }
+  .header h1 {
+    font-size: 2rem;
+  }
 }
-
-.header h1 { color: #2c3e50; }
-.app-calls-container h2, .app-calls-container h3, .app-calls-container h4 { color: #34495e; }
-.button { background-color: #007bff; color: white; }
-.action-card .action-button { background-color: #4CAF50; }
-.status-message { color: #28a745; }
-.status-message.error { color: #dc3545; }
-.hint { color: #666; }
-.footer { color: #777; }
