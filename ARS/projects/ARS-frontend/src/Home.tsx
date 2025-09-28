@@ -3,27 +3,40 @@ import React, { useState, useEffect } from 'react';
 import ConnectWallet from './components/ConnectWallet';
 import Account from './components/Account';
 import AppCalls from './components/AppCalls';
-import { getAccountAddress } from './utils/algorand';
+import { PeraWalletConnect } from '@perawallet/connect';
 
-const CONTRACT_CREATOR_ADDRESS = "YOUR_CONTRACT_CREATOR_ADDRESS_HERE";
+const peraWallet = new PeraWalletConnect();
 
 const Home: React.FC = () => {
   const [connectedAccount, setConnectedAccount] = useState<string | null>(null);
   const [isCreator, setIsCreator] = useState<boolean>(false);
 
   useEffect(() => {
-    const checkConnectedAccount = async () => {
-      const account = await getAccountAddress();
-      setConnectedAccount(account);
-      if (account) {
-        setIsCreator(account === CONTRACT_CREATOR_ADDRESS);
+    // Reconnect to session when component mounts
+    peraWallet.reconnectSession().then(accounts => {
+      if (accounts.length > 0) {
+        setConnectedAccount(accounts[0]);
+        setIsCreator(accounts[0] === CONTRACT_CREATOR_ADDRESS);
       }
+    });
+
+    // Setup event listeners
+    peraWallet.on('connect', (accounts) => {
+      setConnectedAccount(accounts[0]);
+      setIsCreator(accounts[0] === CONTRACT_CREATOR_ADDRESS);
+    });
+
+    peraWallet.on('disconnect', () => {
+      setConnectedAccount(null);
+      setIsCreator(false);
+    });
+
+    // Cleanup listeners on unmount
+    return () => {
+      peraWallet.removeAllListeners();
     };
-    checkConnectedAccount();
-    // Listen for Pera Wallet connection/disconnection events
-    // This part requires direct PeraWalletConnect instance, or a custom event emitter
-    // For simplicity, we'll rely on periodic checks or manual refresh for now.
-  }, []); // The comment highlights the conceptual improvement. The code remains the same.
+  }, []); 
+}; // The comment highlights the conceptual improvement. The code remains the same.
 
   const handleConnect = (accounts: string[]) => {
     if (accounts.length > 0) {
