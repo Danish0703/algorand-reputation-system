@@ -109,3 +109,26 @@ class ReputationContract(ARC4Contract):
         score = self.reputation_scores[target].get()
         self.reputation_scores[target].set(score + boost)
         return "Reputation boosted"
+
+    # ARS/projects/ARS-contracts/smart_contracts/alg_rs/contract.py
+
+    @arc4.abimethod
+    def check_and_revoke(self, address: abi.Address) -> abi.String:
+        score = self.reputation_scores[address].get()
+        threshold = self.reputation_threshold.get()
+    
+        if score < threshold:
+            if self.has_nft(address):
+                nft_id = self.soulbound_nft_id.get()
+                itxn.asset_transfer(
+                    xfer_asset=nft_id,
+                    asset_receiver=self.creator,
+                    asset_sender=address,
+                    asset_amount=1,
+                    asset_close_to=self.creator
+                ).submit()
+                return "NFT revoked due to low reputation"
+            else:
+                return "Reputation below threshold, but no NFT found"
+        else:
+            return "Reputation score is sufficient"
